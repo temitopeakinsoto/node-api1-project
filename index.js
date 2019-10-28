@@ -35,8 +35,8 @@ function getUserById(req, res) {
   const { id } = req.params;
 
   db.findById(id)
-    .then(data => {
-      res.status(200).json(data);
+    .then(user => {
+      res.status(200).json(user);
     })
     .catch(error => {
       res.json(errorMessage, error);
@@ -47,22 +47,33 @@ function updateUserById(req, res) {
   const { id } = req.params;
   const userDetails = req.body;
 
-  db.update(id, userDetails)
-    .then(data => {
-      res.status(200).json(data);
+  if (!userDetails.name || !userDetails.bio) {
+    res
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
+  }
+  else {
+    db.update(id, userDetails)
+    .then(user => {
+      res.status(200).json(user);
     })
     .catch(error => {
       res.json(errorMessage, error);
     });
+  }
+
+  
 }
 
 function getAllUsers(req, res) {
   db.find()
-    .then(data => {
-      res.status(200).json(data);
+    .then(users => {
+      res.status(200).json(users);
     })
-    .catch(error => {
-      res.json(errorMessage, error);
+    .catch(() => {
+      res
+      .status(500)
+      .json({ errorMessage: "The users information could not be retrieved."  });
     });
 }
 
