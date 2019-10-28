@@ -9,6 +9,7 @@ app.use(express.json())
 app.get('/api/users', getAllUsers)
 app.get('/api/users/:id', getUserById)
 app.post('/api/users', createNewUser)
+app.put('/api/users/:id', updateUserById)
 
 function createNewUser(req, res){
     const newUser = req.body;
@@ -32,6 +33,18 @@ function getUserById(req, res) {
     })
     .catch(error => {
         console.log(error);
+    })
+}
+
+function updateUserById(req, res){
+    const {id} = req.params;
+    const userDetails = req.body
+    db.update(id, userDetails)
+    .then(data => {
+        res.json(data)
+    })
+    .catch(error => {
+        res.json(error)
     })
 }
 
