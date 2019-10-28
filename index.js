@@ -1,79 +1,83 @@
-const express = require('express');
-const cors = require('cors');
-const db = require('./data/db.js')
-const app = express()
-app.use(cors()) 
-app.use(express.json()) 
+const express = require("express");
+const cors = require("cors");
+const db = require("./data/db.js");
+const app = express();
+app.use(cors());
+app.use(express.json());
 const errorMessage = "There was an error with this request...";
 
+app.get("/api/users", getAllUsers);
+app.get("/api/users/:id", getUserById);
+app.post("/api/users", createNewUser);
+app.put("/api/users/:id", updateUserById);
+app.delete("/api/users/:id", deleteUserById);
 
-app.get('/api/users', getAllUsers)
-app.get('/api/users/:id', getUserById)
-app.post('/api/users', createNewUser)
-app.put('/api/users/:id', updateUserById)
-app.delete('/api/users/:id', deleteUserById)
+function createNewUser(req, res) {
+  const newUser = req.body;
+  //newUser = {name, bio}
 
-function createNewUser(req, res){
-    const newUser = req.body;
-
+  if (!newUser.name || !newUser.bio) {
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+  } else {
     db.insert(newUser)
-    .then(data => {
-        res.status(200).json(data);
-    })
-    .catch(error => {
-        res.status(errorMessage, error)
-    })
-
+      .then(user => {
+        res.status(201).json(user);
+      })
+      .catch(error => {
+        res.status(501).json(errorMessage, error);
+      });
+  }
 }
 
 function getUserById(req, res) {
-    const { id } = req.params;
-    
-    db.findById(id)
-    .then(data => {
-        res.status(200).json(data);
-    })
-    .catch(error => {
-        res.json(errorMessage, error);
-    })
-}
+  const { id } = req.params;
 
-function updateUserById(req, res){
-    const {id} = req.params;
-    const userDetails = req.body;
-
-    db.update(id, userDetails)
+  db.findById(id)
     .then(data => {
-        res.status(200).json(data)
-    })
-    .catch(error => {
-        res.json(errorMessage, error)
-    })
-}
-
-function getAllUsers(req, res){
-    db.find()
-    .then(data => {
-        res.status(200).json(data)
+      res.status(200).json(data);
     })
     .catch(error => {
       res.json(errorMessage, error);
+    });
+}
+
+function updateUserById(req, res) {
+  const { id } = req.params;
+  const userDetails = req.body;
+
+  db.update(id, userDetails)
+    .then(data => {
+      res.status(200).json(data);
     })
+    .catch(error => {
+      res.json(errorMessage, error);
+    });
+}
+
+function getAllUsers(req, res) {
+  db.find()
+    .then(data => {
+      res.status(200).json(data);
+    })
+    .catch(error => {
+      res.json(errorMessage, error);
+    });
 }
 
 function deleteUserById(req, res) {
-    const {id} = req.params;
+  const { id } = req.params;
 
-    db.remove(id)
+  db.remove(id)
     .then(data => {
-        res.status(200).json(data);
+      res.status(200).json(data);
     })
     .catch(error => {
-        res.json(errorMessage, error)
-    })
+      res.json(errorMessage, error);
+    });
 }
 
-
 app.listen(process.env.PORT || 4000, () => {
-    console.log("server running on port " + (process.env.PORT || 4000))
-})
+  console.log("server running on port " + (process.env.PORT || 4000));
+});
