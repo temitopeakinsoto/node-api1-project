@@ -8,9 +8,24 @@ app.use(express.json())
 
 app.get('/api/users', getAllUsers)
 app.get('/api/users/:id', getUserById)
+app.post('/api/users', createNewUser)
+
+function createNewUser(req, res){
+    const newUser = req.body;
+
+    db.insert(newUser)
+    .then(data => {
+        res.json(data);
+    })
+    .catch(error => {
+        res.json(error)
+    })
+
+}
 
 function getUserById(req, res) {
     const { id } = req.params;
+    
     db.findById(id)
     .then(data => {
         res.json(data);
