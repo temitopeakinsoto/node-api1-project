@@ -7,6 +7,18 @@ app.use(express.json())
 
 
 app.get('/api/users', getAllUsers)
+app.get('/api/users/:id', getUserById)
+
+function getUserById(req, res) {
+    const { id } = req.params;
+    db.findById(id)
+    .then(data => {
+        res.json(data);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
 
 function getAllUsers(req, res){
     db.find()
@@ -14,7 +26,7 @@ function getAllUsers(req, res){
       res.json(data)
     })
     .catch(error => {
-      console.log(error)
+      console.log(error);
     })
 }
 
