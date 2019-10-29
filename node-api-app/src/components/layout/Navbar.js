@@ -4,7 +4,7 @@ export default function Navbar() {
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
     <div className="container">
-      <a className="navbar-brand" href="landing.html">Node API App</a>
+      <a className="navbar-brand" href="#">Node API App</a>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
         <span className="navbar-toggler-icon"></span>
       </button>
@@ -12,17 +12,17 @@ export default function Navbar() {
       <div className="collapse navbar-collapse" id="mobile-nav">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
-            <a className="nav-link" href="profiles.html"> Admin
+            <a className="nav-link" href="#"> Admin
             </a>
           </li>
         </ul>
 
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <a className="nav-link" href="register.html">Sign Up</a>
+            <a className="nav-link" href="#">Sign Up</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="login.html">Login</a>
+            <a className="nav-link" href="#">Login</a>
           </li>
         </ul>
       </div>
