@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const db = require("./data/db.js");
@@ -5,6 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 const errorMessage = "There was an error with this request...";
+
+const port = process.env.PORT;
 
 app.get("/api/users", getAllUsers);
 app.get("/api/users/:id", getUserById);
@@ -19,7 +22,11 @@ function createNewUser(req, res) {
       .status(400)
       .json({ errorMessage: "Please provide name and bio for the user." });
   } else {
-    db.insert(newUser)
+    const userInfo = {
+      name: newUser.name,
+      bio: newUser.bio || ""
+    }
+    db.insert(userInfo)
       .then(user => {
         res.status(201).json(user);
       })
@@ -108,6 +115,6 @@ function deleteUserById(req, res) {
     });
 }
 
-app.listen(process.env.PORT || 4000, () => {
-  console.log("server running on port " + (process.env.PORT || 4000));
+app.listen(port, () => {
+  console.log(`server running on port ${port}`);
 });
