@@ -7,13 +7,14 @@ app.use(cors());
 app.use(express.json());
 const errorMessage = "There was an error with this request...";
 
-const port = process.env.PORT;
 
 app.get("/api/users", getAllUsers);
 app.get("/api/users/:id", getUserById);
 app.post("/api/users", createNewUser);
 app.put("/api/users/:id", updateUserById);
 app.delete("/api/users/:id", deleteUserById);
+
+const port = process.env.PORT;
 
 function createNewUser(req, res) {
   const newUser = req.body;
